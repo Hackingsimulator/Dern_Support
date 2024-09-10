@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAPx1320/MekW0z4lkmY4CQgAAAAACAAAAAAAQZgAAAAEAACAAAAAUkFS6yM9njpTi39lAtP2rva0q8OGdQ+3iHtQlXy1iVQAAAAAOgAAAAAIAACAAAAB6eqs0DysZOCvwyoLCkRp51RP5G5WFIU6XS3Vu+f38r4AAAAC06B7+4AV/f2gVr8sjLmREn6eMfBkzT1vipFiHScvRV+HaL0tsQEckuS55TmT6FduuFJcSof/LRZRkAYWMj5QI/hHn9pgkcmzNWD+EYVy5xmM/vzJEBwPTlzf2KjdXDZJLi6M/g1sk2NGp8/vjI9wV1CceTFiO33uvJVSyyhloD0AAAABDIp2AsGwUm1jSg5bld3yZbDnSEs+Kwolo2sJAPgI02W+zSw/P2OWsXv7nahK2j4i9Q61KHpm7wPD34w7HTfZ4</EncryptedPassword>
+    <History>True|2024-08-17T09:01:41.4583211Z;True|2024-08-17T11:53:16.9914427+03:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=tcp:empdbserver.database.windows.net,1433%3bInitial Catalog=EmployeesCloudDB%3bPersist Security Info=False%3bUser ID=employeesAdmin%3bPassword=U8r5!0nbs%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="ErdAndEF.Data.EmployeeDbContext">
+      <Value>Server=tcp:empdbserver.database.windows.net,1433%3bInitial Catalog=EmployeesCloudDB%3bPersist Security Info=False%3bUser ID=employeesAdmin%3bPassword=U8r5!0nbs%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
