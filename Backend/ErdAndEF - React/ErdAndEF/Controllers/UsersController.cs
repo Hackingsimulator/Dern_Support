@@ -48,18 +48,36 @@ namespace ErdAndEF.Controllers
 
 
         // login 
-        [HttpPost("Login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+    [HttpPost("Login")]
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+    {
+        // Check if the loginDto is null
+        if (loginDto == null)
         {
-            var user = await userService.UserAuthentication(loginDto.Username, loginDto.Password);
-
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            return Ok(user);
+            Console.WriteLine("Received null login data.");
+            return BadRequest(new { Message = "Login data is required." });
         }
+
+        // Check if both username and password are provided
+        if (string.IsNullOrWhiteSpace(loginDto.Username) || string.IsNullOrWhiteSpace(loginDto.Password))
+        {
+            return BadRequest(new { Message = "Username and password are required." });
+        }
+
+        // Perform user authentication
+        var user = await userService.UserAuthentication(loginDto.Username, loginDto.Password);
+
+        // Check if authentication failed
+        if (user == null)
+        {
+            Console.WriteLine($"Authentication failed for user: {loginDto.Username}");
+            return Unauthorized(new { Message = "Invalid username or password." });
+        }
+
+        // Return the authenticated user details with token
+        return Ok(user);
+    }
+
 
 
     [Authorize(Roles = "User", Policy = "CanDelete")]
@@ -68,6 +86,7 @@ namespace ErdAndEF.Controllers
     {
         // Get the user's profile using the claims from the token
         var userProfile = await userService.userProfile(User);
+        Console.WriteLine(userProfile);
 
         // Return the user profile or Unauthorized if not found
         if (userProfile == null)

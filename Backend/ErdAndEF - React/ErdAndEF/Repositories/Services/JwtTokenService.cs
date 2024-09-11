@@ -12,14 +12,12 @@ namespace ErdAndEF.Repositories.Services
         private readonly IConfiguration _configuration;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private UserManager<ApplicationUser> _userManager;
-        public JwtTokenService(IConfiguration configuration , SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public JwtTokenService(IConfiguration configuration, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
-
         }
-
 
         public static TokenValidationParameters ValidateToken(IConfiguration configuration)
         {
@@ -30,57 +28,47 @@ namespace ErdAndEF.Repositories.Services
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
-
         }
-
 
         private static SecurityKey GetSecurityKey(IConfiguration configuration)
         {
             var secretKey = configuration["JWT:SecretKey"];
             if (secretKey == null)
             {
-                throw new InvalidOperationException("Jwt Secret key is not exsist");
+                throw new InvalidOperationException("Jwt Secret key does not exist.");
             }
 
             var secretBytes = Encoding.UTF8.GetBytes(secretKey);
-
             return new SymmetricSecurityKey(secretBytes);
         }
 
-
         public async Task<string> GenerateToken(ApplicationUser user, TimeSpan expiryDate)
         {
-
-            var userPrincliple =  await _signInManager.CreateUserPrincipalAsync(user);
-            if (userPrincliple == null)
+            var userPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
+            if (userPrincipal == null)
             {
-                throw new InvalidOperationException("User m principal error.");
+                throw new InvalidOperationException("User principal error.");
             }
 
+            var claims = userPrincipal.Claims.ToList();
 
-            var claims = userPrincliple.Claims.ToList();
-            var userPermissions = await _userManager.GetClaimsAsync(user);
-            claims.AddRange(userPermissions);
+            // Add roles to the token
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var signInKey = GetSecurityKey(_configuration);
-            if (signInKey == null)
-            {
-                throw new InvalidOperationException("Signing key cannot be null.");
-            }
-            var token = new JwtSecurityToken
-                (
-                expires: DateTime.UtcNow  +  expiryDate,
+
+            var token = new JwtSecurityToken(
+                expires: DateTime.UtcNow + expiryDate,
                 signingCredentials: new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256),
                 claims: claims
-                );
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-
-
-
-
 
     }
 }
