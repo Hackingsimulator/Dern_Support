@@ -42,7 +42,7 @@ namespace ErdAndEF.Controllers
             return Unauthorized();
         }
 
-        return user;
+        return Ok(user);
     }
 
 
@@ -58,16 +58,26 @@ namespace ErdAndEF.Controllers
                 return Unauthorized();
             }
 
-            return user;
+            return Ok(user);
         }
 
 
-        [Authorize(Roles = "User" , Policy = "CanDelete")]
-        [HttpGet("Profile")]
-        public async Task<ActionResult<UserDto>> Profile()
+    [Authorize(Roles = "User", Policy = "CanDelete")]
+    [HttpGet("Profile")]
+    public async Task<ActionResult<UserDto>> Profile()
+    {
+        // Get the user's profile using the claims from the token
+        var userProfile = await userService.userProfile(User);
+
+        // Return the user profile or Unauthorized if not found
+        if (userProfile == null)
         {
-          return await userService.userProfile(User);
+            return Unauthorized();
         }
+
+        return Ok(userProfile);
+    }
+
 
 
         //[Authorize(Roles = "Admin")] 

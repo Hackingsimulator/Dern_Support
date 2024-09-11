@@ -2303,7 +2303,12 @@ C:/Users/DELL/Desktop/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ref/ErdAndEF.dl
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/ErdAndEF.pdb
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Azure.Core.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Azure.Identity.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/BouncyCastle.Crypto.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Google.Protobuf.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Humanizer.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/K4os.Compression.LZ4.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/K4os.Compression.LZ4.Streams.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/K4os.Hash.xxHash.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Microsoft.AspNetCore.Cryptography.Internal.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -2354,6 +2359,11 @@ C:/Users/DELL/Desktop/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ref/ErdAndEF.dl
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Microsoft.Win32.SystemEvents.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Mono.TextTemplating.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/MySql.Data.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Ubiety.Dns.Core.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/ZstdNet.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/MySql.EntityFrameworkCore.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/MySqlConnector.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Newtonsoft.Json.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/NuGet.Common.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/NuGet.Configuration.dll
@@ -2364,6 +2374,7 @@ C:/Users/DELL/Desktop/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ref/ErdAndEF.dl
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/NuGet.ProjectModel.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/NuGet.Protocol.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/NuGet.Versioning.dll
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Pomelo.EntityFrameworkCore.MySql.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -2540,6 +2551,7 @@ C:/Users/DELL/Desktop/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ref/ErdAndEF.dl
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ErdAndEF.csproj.CoreCompileInputs.cache
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ErdAndEF.MvcApplicationPartsAssemblyInfo.cs
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ErdAndEF.MvcApplicationPartsAssemblyInfo.cache
+/Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/ErdAndEF.sourcelink.json
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/staticwebassets.build.json
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/staticwebassets.development.json
 /Users/sajedhussein/Documents/btecc_code/Backend/ErdAndEF - React/ErdAndEF/obj/Debug/net7.0/staticwebassets/msbuild.ErdAndEF.Microsoft.AspNetCore.StaticWebAssets.props

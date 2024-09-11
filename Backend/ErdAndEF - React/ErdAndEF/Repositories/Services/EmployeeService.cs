@@ -13,74 +13,64 @@ namespace ErdAndEF.Repositories.Services
         {
             _context = context;
         }
+
         public async Task<Employee> CreateEmployee(Employee employee)
         {
-            _context.employees.Add(employee);
+            _context.Employees.Add(employee); // Corrected reference
             await _context.SaveChangesAsync();
-
             return employee;
         }
 
         public async Task DeleteEmployee(int id)
         {
             var getEmployee = await GetEmployeeById(id);
-            _context.Entry(getEmployee).State = EntityState.Deleted;
-            //_context.employees.Remove(getEmployee);
-            await _context.SaveChangesAsync();  
-
+            if (getEmployee != null)
+            {
+                _context.Employees.Remove(getEmployee); // Corrected reference
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<List<Employee>> GetAllEmployees()
         {
-            var allEmployees =  await  _context.employees.ToListAsync();
-            return allEmployees;
+            return await _context.Employees.ToListAsync(); // Corrected reference
         }
 
         public async Task<Employee> GetEmployeeById(int employeeId)
         {
-            //var emplyee = _context.employees.Where(x => x.Equals(employeeId));
-            var employee = await _context.employees.FindAsync(employeeId);
-            return employee;
+            return await _context.Employees.FindAsync(employeeId); // Corrected reference
         }
 
         public async Task<Employee> UpdateEmployee(int id, Employee employee)
         {
-            //_context.Entry(employee).State = EntityState.Modified;
-            //await _context.SaveChangesAsync();
+            var existingEmployee = await _context.Employees.FindAsync(id);
+            if (existingEmployee == null)
+            {
+                throw new Exception("Employee not found");
+            }
 
-            var exsitingEmployee = await _context.employees.FindAsync(id);
-            exsitingEmployee = employee;
+            // Update properties of existing employee with the new employee data
+            existingEmployee.FirstName = employee.FirstName;
+            existingEmployee.LastName = employee.LastName;
+            existingEmployee.Email = employee.Email;
+            existingEmployee.Phone = employee.Phone;
+
             await _context.SaveChangesAsync();
-
-            return employee;
+            return existingEmployee;
         }
 
-        // get all projects for a given employee by id
         public async Task<List<Project>> GetProjectsForEmployee(int employeeId)
         {
-            var projetcsForEmployees = await _context.EmployeeProjectsDBset
+            return await _context.EmployeeProjectsDBset
                 .Where(ep => ep.EmployeeID == employeeId)
                 .Select(ep => ep.Project)
                 .ToListAsync();
-
-            return projetcsForEmployees;
-
         }
 
         public async Task<EmployeeTask> SubmitARequest(EmployeeTask task)
         {
             _context.EmployeeTasksDb.Add(task);
             await _context.SaveChangesAsync();
-
-            return task;
-        }
-
-        async Task<EmployeeTask> IEmployee.SubmitARequest(EmployeeTask task)
-        {
-            _context.EmployeeTasksDb.Add(task);
-
-            await _context.SaveChangesAsync();
-
             return task;
         }
 
@@ -89,12 +79,8 @@ namespace ErdAndEF.Repositories.Services
             return await _context.EmployeeTasksDb.ToListAsync();
         }
 
-
-
-
         public async Task<EmployeeTask> UpdateRequestStatus(int taskId, string status)
         {
-
             var task = await _context.EmployeeTasksDb.FindAsync(taskId);
             if (task == null)
             {
@@ -102,8 +88,7 @@ namespace ErdAndEF.Repositories.Services
             }
             task.Status = status;
             await _context.SaveChangesAsync();
-
-            return task; 
+            return task;
         }
     }
 }

@@ -18,16 +18,19 @@ namespace ErdAndEF
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
 
-            // Get the connection string settings 
+            // Get the connection string settings from appsettings.json or appsettings.Development.json
             string ConnectionStringVar = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<EmployeeDbContext>(optionsX => optionsX.UseSqlServer(ConnectionStringVar));
+            // Switch to MySQL configuration
+            builder.Services.AddDbContext<EmployeeDbContext>(options =>
+            options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+            new MySqlServerVersion(new Version(8, 0, 21)) // Ensure the MySQL version here matches your setup
+                    ));
+
 
             // Add Identity Service
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<EmployeeDbContext>();
-                
-
 
             //builder.Services.AddTransient<IEmployee, EmployeeService>();
             builder.Services.AddScoped<IEmployee, EmployeeService>();
@@ -46,22 +49,18 @@ namespace ErdAndEF
                     });
             });
 
-
-            // add auth service to the app using jwt
-            builder.Services.AddAuthentication(
-                options =>
+            // Add auth service to the app using JWT
+            builder.Services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 }
-                ).AddJwtBearer(
-                options =>
-                {
-                    options.TokenValidationParameters = JwtTokenService.ValidateToken(builder.Configuration);
-                });
+            ).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = JwtTokenService.ValidateToken(builder.Configuration);
+            });
 
-             
             // Configure Authorization with Claims
             builder.Services.AddAuthorization(options =>
             {
@@ -69,49 +68,41 @@ namespace ErdAndEF
                 options.AddPolicy("CanDelete", policy => policy.RequireClaim("Permission", "CanDelete"));
             });
 
-
-            
-
-            //swagger configuration
-            builder.Services.AddSwaggerGen
-                (
-                
-                option =>
+            // Swagger configuration
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("employeesApi", new OpenApiInfo()
                 {
-                    option.SwaggerDoc("employeesApi", new Microsoft.OpenApi.Models.OpenApiInfo()
-                    {
-                        Title = "Employees Api Doc",
-                        Version = "v1",
-                        Description = "Api for managing all emolyees"
-                    });
+                    Title = "Employees Api Doc",
+                    Version = "v1",
+                    Description = "Api for managing all employees"
+                });
 
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                    {
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.Http,
-                        Scheme = "bearer",
-                        BearerFormat = "JWT",
-                        In = ParameterLocation.Header,
-                        Description = "Please enter user token below."
-                    });
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Please enter user token below."
+                });
 
                 option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                     {
+                        new OpenApiSecurityScheme
                         {
-                            new OpenApiSecurityScheme
+                            Reference = new OpenApiReference
                             {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            Array.Empty<string>()
-                        }
-                    });
-
-
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
                 });
+            });
 
             var app = builder.Build();
 
@@ -119,27 +110,18 @@ namespace ErdAndEF
             app.UseAuthentication();
             app.UseAuthorization();
 
-            
-            // call swagger service
-            app.UseSwagger
-                (
-                options =>
-                {
-                    options.RouteTemplate = "api/{documentName}/swagger.json";
-                }
-                );
+            // Call swagger service
+            app.UseSwagger(options =>
+            {
+                options.RouteTemplate = "api/{documentName}/swagger.json";
+            });
 
-            // call swagger UI
-            app.UseSwaggerUI
-                (
-                options =>
-                {
-                    options.SwaggerEndpoint("/api/employeesApi/swagger.json", "Emp Api");
-                    options.RoutePrefix = "";
-                }
-                );
-
-
+            // Call swagger UI
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/api/employeesApi/swagger.json", "Emp Api");
+                options.RoutePrefix = "";
+            });
 
             app.UseExceptionHandler(errorApp =>
             {
@@ -163,16 +145,8 @@ namespace ErdAndEF
                 });
             });
 
-            //app.MapControllerRoute(
-            //name: "default",
-            //pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
             app.MapControllers();
-
-            //app.MapGet("/", () => "Hello World!");
             app.MapGet("/newpage", () => "Hello World! from the new page");
-
 
             app.Run();
         }
