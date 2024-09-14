@@ -42,33 +42,32 @@ namespace ErdAndEF.Repositories.Services
             return new SymmetricSecurityKey(secretBytes);
         }
 
-        public async Task<string> GenerateToken(ApplicationUser user, TimeSpan expiryDate)
+        public async Task<string> GenerateToken(ApplicationUser user, TimeSpan expiry)
         {
-            var userPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
-            if (userPrincipal == null)
-            {
-                throw new InvalidOperationException("User principal error.");
-            }
-
-            var claims = userPrincipal.Claims.ToList();
-
-            // Add roles to the token
+            var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
 
-            var signInKey = GetSecurityKey(_configuration);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
+
+            // Add role claims to the token
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow + expiryDate,
-                signingCredentials: new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256),
-                claims: claims
-            );
+                claims: claims,
+                expires: DateTime.Now.Add(expiry),
+                signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
     }
 }

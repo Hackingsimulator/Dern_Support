@@ -3,6 +3,7 @@ using System;
 using ErdAndEF.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ErdAndEF.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240914153312_AddUserIdToScheduledRepair")]
+    partial class AddUserIdToScheduledRepair
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

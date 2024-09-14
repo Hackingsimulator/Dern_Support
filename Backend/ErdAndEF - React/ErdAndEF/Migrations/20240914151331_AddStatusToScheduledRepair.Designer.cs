@@ -3,6 +3,7 @@ using System;
 using ErdAndEF.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ErdAndEF.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240914151331_AddStatusToScheduledRepair")]
+    partial class AddStatusToScheduledRepair
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -398,39 +401,6 @@ namespace ErdAndEF.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ErdAndEF.Models.ScheduledRepair", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("RepairDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ScheduledRepairs");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -498,19 +468,19 @@ namespace ErdAndEF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1197213740,
+                            Id = -986270113,
                             ClaimValue = "CanCreate",
                             RoleId = "admin"
                         },
                         new
                         {
-                            Id = 374354964,
+                            Id = -1172025757,
                             ClaimValue = "CanDelete",
                             RoleId = "admin"
                         },
                         new
                         {
-                            Id = 400710363,
+                            Id = 532160765,
                             ClaimValue = "CanDelete",
                             RoleId = "user"
                         });
@@ -593,6 +563,35 @@ namespace ErdAndEF.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("ScheduledRepair", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RepairDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScheduledRepairs");
                 });
 
             modelBuilder.Entity("ErdAndEF.Models.EmployeeProjects", b =>

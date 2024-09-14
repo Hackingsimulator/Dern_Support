@@ -21,7 +21,7 @@ namespace ErdAndEF.Controllers
             _context = context;
         }
 
-
+        // Get all spare parts
         [HttpGet("allStocks")]
         public async Task<IActionResult> GetAllStocks()
         {
@@ -29,7 +29,7 @@ namespace ErdAndEF.Controllers
             return Ok(spareParts);
         }
 
-
+        // Search spare parts by name or category
         [HttpGet("search")]
         public async Task<IActionResult> Search(string name = "", string category = "")
         {
@@ -46,7 +46,7 @@ namespace ErdAndEF.Controllers
             return Ok(spareParts);
         }
 
-        // 2. edit laptops parts by id
+        // Edit spare parts by id
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] ITStocks updatedPart)
         {
@@ -66,5 +66,41 @@ namespace ErdAndEF.Controllers
 
             return Ok(sparePart);
         }
+
+        // Add a new spare part
+        [HttpPost("add")]   
+        public async Task<IActionResult> Add([FromBody] ITStocks newPart)
+        {
+            if (newPart == null)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            try
+            {
+                // Clear the Id to ensure the database auto-assigns it
+                newPart.Id = 0; // Ensure the ID is not manually set, and let the database handle it.
+
+                // Add the new spare part to the database
+                await _context.ITStocksDb.AddAsync(newPart);
+                await _context.SaveChangesAsync();
+
+                // Return the newly created part with its auto-generated ID
+                return CreatedAtAction(nameof(GetAllStocks), new { id = newPart.Id }, newPart);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log and return detailed exception information
+                return StatusCode(500, new
+                {
+                    StatusCode = 500,
+                    Message = "An unexpected error occurred.",
+                    DetailedMessage = ex.InnerException?.Message ?? ex.Message,
+                    ExceptionType = ex.GetType().Name
+                });
+            }
+        }
+
+
     }
 }

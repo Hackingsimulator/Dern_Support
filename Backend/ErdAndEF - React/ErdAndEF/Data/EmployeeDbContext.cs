@@ -23,6 +23,8 @@ namespace ErdAndEF.Data
         public DbSet<ITStocks> ITStocksDb { get; set; }
 
         public DbSet<Jobs> JobsDb { get; set; }
+        public DbSet<ScheduledRepair> ScheduledRepairs { get; set; }
+
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

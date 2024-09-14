@@ -9,114 +9,124 @@ namespace ErdAndEF.Repositories.Services
 {
     public class IdentitiUserService : IUser
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;  // Inject RoleManager
+        private readonly JwtTokenService jwtTokenService;
 
-        private UserManager<ApplicationUser> _userManager;
-
-        // inject jwt service
-        private JwtTokenService jwtTokenService;
-        public IdentitiUserService(UserManager<ApplicationUser> Manager, JwtTokenService jwtTokenService)
+        public IdentitiUserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, JwtTokenService jwtTokenService)
         {
-            _userManager = Manager;
+            _userManager = userManager;
+            _roleManager = roleManager;
             this.jwtTokenService = jwtTokenService;
         }
 
-    public async Task<UserDto> Register(RegisterdUserDto registerdUserDto, ModelStateDictionary modelState)
-    {
-        var user = new ApplicationUser
+        // Register logic with roles
+        public async Task<UserDto> Register(RegisterdUserDto registerdUserDto, ModelStateDictionary modelState)
         {
-            UserName = registerdUserDto.UserName,
-            Email = registerdUserDto.Email
-        };
-
-        var result = await _userManager.CreateAsync(user, registerdUserDto.Password);
-
-        if (result.Succeeded)
-        {
-            // Ensure that a default role is assigned (e.g., "User")
-            var role = registerdUserDto.Roles.FirstOrDefault() ?? "user";  // Assign "User" role if none provided
-            var roleAssignResult = await _userManager.AddToRoleAsync(user, role);
-
-            if (!roleAssignResult.Succeeded)
+            var user = new ApplicationUser
             {
-                foreach (var error in roleAssignResult.Errors)
+                UserName = registerdUserDto.UserName,
+                Email = registerdUserDto.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, registerdUserDto.Password);
+
+            if (result.Succeeded)
+            {
+                // Ensure that at least one role is assigned
+                var roles = registerdUserDto.Roles ?? new List<string> { "User" };  // Assign "User" role if none provided
+
+                foreach (var role in roles)
                 {
-                    modelState.AddModelError("", error.Description);
+                    // Check if the role exists, and create if it doesn't
+                    if (!await _roleManager.RoleExistsAsync(role))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(role));
+                    }
+
+                    var roleAssignResult = await _userManager.AddToRoleAsync(user, role);
+                    if (!roleAssignResult.Succeeded)
+                    {
+                        foreach (var error in roleAssignResult.Errors)
+                        {
+                            modelState.AddModelError("", error.Description);
+                        }
+                        return null;
+                    }
                 }
-                return null;
+
+                // Fetch roles assigned to the user
+                var assignedRoles = await _userManager.GetRolesAsync(user);
+
+                // Return user details including the roles
+                return new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Roles = assignedRoles
+                };
             }
 
-            // Fetch roles assigned to the user
-            var roles = await _userManager.GetRolesAsync(user);
-
-            // Return user details including the roles
-            return new UserDto
+            foreach (var error in result.Errors)
             {
-                Id = user.Id,
-                Username = user.UserName,
-                Roles = roles
-            };
+                modelState.AddModelError("", error.Description);
+            }
+
+            return null;
         }
 
-        foreach (var error in result.Errors)
+        // Login logic with JWT token generation
+        public async Task<UserDto> UserAuthentication(string username, string password)
         {
-            modelState.AddModelError("", error.Description);
-        }
+            Console.WriteLine("Inside the userAuth func");
 
-        return null;
-    }
+            // Check if the user exists
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return null; // or return an appropriate response
+            }
 
+            // Validate the password
+            bool passValidation = await _userManager.CheckPasswordAsync(user, password);
+            Console.WriteLine("Password validation result: " + passValidation);
 
+            if (passValidation)
+            {
+                // Fetch user roles
+                var roles = await _userManager.GetRolesAsync(user);
+                Console.WriteLine("User roles: " + string.Join(", ", roles));
 
-    
-    public async Task<UserDto> UserAuthentication(string username, string password)
-    {
-        Console.WriteLine("Inside the userAuth func");
+                // Generate and return the token if the password is valid, along with user roles
+                return new UserDto()
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Token = await jwtTokenService.GenerateToken(user, TimeSpan.FromDays(1.0)),
+                    Roles = roles // Add roles to the response
+                };
+            }
 
-        // Check if the user exists
-        var user = await _userManager.FindByNameAsync(username);
-        if (user == null)
-        {
-            Console.WriteLine("User not found.");
+            // If password is invalid, log and return null
+            Console.WriteLine("Password validation failed.");
             return null; // or return an appropriate response
         }
 
-        // Validate the password
-        bool passValidation = await _userManager.CheckPasswordAsync(user, password);
-        Console.WriteLine("Password validation result: " + passValidation);
-
-        if (passValidation)
+        // Fetch user profile logic
+        public async Task<UserDto> userProfile(ClaimsPrincipal claimsPrincipal)
         {
+            var user = await _userManager.GetUserAsync(claimsPrincipal);
+
             // Fetch user roles
             var roles = await _userManager.GetRolesAsync(user);
-            Console.WriteLine("User roles: " + string.Join(", ", roles));
 
-            // Generate and return the token if the password is valid, along with user roles
             return new UserDto()
             {
                 Id = user.Id,
                 Username = user.UserName,
                 Token = await jwtTokenService.GenerateToken(user, TimeSpan.FromMinutes(60)),
-                Roles = roles // Add roles to the response
-            };
-        }
-
-        // If password is invalid, log and return null
-        Console.WriteLine("Password validation failed.");
-        return null; // or return an appropriate response
-    }
-
-
-
-        public async Task<UserDto> userProfile(ClaimsPrincipal claimsPrincipal)
-        {
-        var user = await _userManager.GetUserAsync(claimsPrincipal);
-
-            return new UserDto()
-            {
-                Id = user.Id,
-                Username = user.UserName,
-                Token = await jwtTokenService.GenerateToken(user, System.TimeSpan.FromMinutes(60)) 
-                
+                Roles = roles // Include roles in the response
             };
         }
     }

@@ -48,6 +48,7 @@ namespace ErdAndEF
                               .AllowAnyMethod();
                     });
             });
+            
 
             // Add auth service to the app using JWT
             builder.Services.AddAuthentication(options =>
@@ -107,6 +108,7 @@ namespace ErdAndEF
             var app = builder.Build();
 
             app.UseCors("AllowReactApp");
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 
