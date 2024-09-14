@@ -24,9 +24,15 @@ npm (Comes with Node.js)
 .NET SDK (v6.0 or higher)
 MySQL (v8.x or higher)
 
-Frontend code is contained in demo-project update: use npm start to run
+Frontend code is contained in the demo-project update: use npm start to run
 Run locally on port 3000
-Backend code is in the backend folder: use dotnet run to start server
+Backend code is in the backend folder: use dotnet run to start the server
 Run locally on port 5235
 
-Future improvements and adjustments to come soon! 
+Database Setup
+Make sure MySQL is installed and running. The application is configured to connect to MySQL, and the database tables will be automatically created using Entity Framework Migrations.
+
+Port: 3306 (default MySQL port)
+Database Name: myappdb
+
+Future improvements and adjustments are to come soon! 
