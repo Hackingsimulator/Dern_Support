@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ErdAndEF")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0e2f143be530fc0ee67897f410d1b4a229e57c84")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d2f375ecdf0f2355806485b8b2c1c6a140780e9f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ErdAndEF")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ErdAndEF")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
